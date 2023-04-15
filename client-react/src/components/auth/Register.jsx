@@ -45,7 +45,7 @@ export const Register = (props) => {
             name: "password",
             type: show1 ? "text" : "password",
             errorMessage: "Invalid format.",
-            message: "The password must be at least 6 characters, with uppercase and lowercase letters, numbers and special characters.",
+            message: "The password must be at least 8 characters, with uppercase and lowercase letters, numbers and special characters.",
             placeholder: "Password*",
             pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
             className: "w-full border outline-gray-400 rounded py-3 px-3 text-gray-700 text-left",
@@ -53,27 +53,27 @@ export const Register = (props) => {
                             <div id="length">
                                 <FontAwesomeIcon className="fa-xmark icon" icon={faXmark}/>  
                                 <FontAwesomeIcon className="fa-check icon" icon={faCheck}/>  
-                                <span className="ml-5">8 characters missing</span>
+                                <span className="ml-5">8 characters</span>
                             </div>
                             <div id="lower">
                                 <FontAwesomeIcon className="fa-xmark icon" icon={faXmark}/>  
                                 <FontAwesomeIcon className="fa-check icon" icon={faCheck}/>  
-                                <span className="ml-5">A lowercase letter is missing</span>
+                                <span className="ml-5">A lowercase letter</span>
                             </div>
                             <div id="capital">
                                 <FontAwesomeIcon className="fa-xmark icon" icon={faXmark}/>  
                                 <FontAwesomeIcon className="fa-check icon" icon={faCheck}/>  
-                                <span className="ml-5">A capital letter is missing</span>
+                                <span className="ml-5">A capital letter</span>
                             </div>
                             <div id="number">
                                 <FontAwesomeIcon className="fa-xmark icon" icon={faXmark}/>  
                                 <FontAwesomeIcon className="fa-check icon" icon={faCheck}/>  
-                                <span className="ml-5">Number not present</span>
+                                <span className="ml-5">Number</span>
                             </div>
                             <div id="special">
                                 <FontAwesomeIcon className="fa-xmark icon" icon={faXmark}/>  
                                 <FontAwesomeIcon className="fa-check icon" icon={faCheck}/>  
-                                <span className="ml-5">Special character is missing</span>
+                                <span className="ml-5">Special character</span>
                             </div>
                         </div>,
             butoni: show1 ? 
@@ -99,7 +99,7 @@ export const Register = (props) => {
             id: 4,
             name: "first_name",
             type: "text",
-            errorMessage: "Obligatory.",
+            errorMessage: "Required.",
             placeholder: "First name*",
             className: "w-full border outline-gray-400 rounded py-3 px-3 text-gray-700",
             required: true,
@@ -108,7 +108,7 @@ export const Register = (props) => {
             id: 5,
             name: "last_name",
             type: "text",
-            errorMessage: "Obligatory.",
+            errorMessage: "Required.",
             placeholder: "Last name*",
             className: "w-full border outline-gray-400 rounded py-3 px-3 text-gray-700",
             required: true,
@@ -131,11 +131,11 @@ export const Register = (props) => {
                         navigate('/');
                     });
                 }
-                else{
+                else if(res.data.status === 400){
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Something went wrong!',
+                        text: res.data.message,
                     })
                 }
             });
@@ -261,7 +261,7 @@ export const Register = (props) => {
                     <p className="ml-8">I declare that I have read and accepted the information on personal data. *</p>
                 </div>
                 <div className="py-4 px-4">
-                    <button onClick={Save} disabled={stateDisable} id="register" className="text-center">REGISTRATI SENZA DIRCI DI PIÙ</button>
+                    <button onClick={Save} disabled={stateDisable} id="register" className="text-center">SIGN IN</button>
                 </div>
             </div>
         </div>

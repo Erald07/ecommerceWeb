@@ -15,37 +15,48 @@ class UserController extends Controller
     {
         if($request->isMethod('POST')){
 
-            $val = $request->validate([
-                'email' => 'required|:rfc,dns|unique:users,email',
-                'password' => ['required', Password::min(8)->letters()->numbers()->symbols()->mixedCase()],
-                'first_name' => 'required',
-                'last_name' => 'required',
-            ]);
+            $data = $request->input();
 
-            if($val){
-                $data = $request->input();
+            $userEmail = User::where('email', $data['email'])->exists();
+            if(!$userEmail){
 
-                $user = new User;
-                $user->email = $data['email'];
-                $user->password = Hash::make($data['password']);
-                $user->first_name = $data['first_name'];
-                $user->last_name = $data['last_name'];
-
-                $user->save();
-
-                $token = $user->createToken($user->email . '_Token')->plainTextToken;
-
-                return response()->json([
-                    'status' => 200,
-                    'message' => "Registration was Successful!",
-                    "username" => $data['first_name'],
-                    'token' => $token,
+                $val = $request->validate([
+                    'email' => 'required|:rfc,dns|unique:users,email',
+                    'password' => ['required', Password::min(8)->letters()->numbers()->symbols()->mixedCase()],
+                    'first_name' => 'required',
+                    'last_name' => 'required',
                 ]);
+
+                if($val){
+
+                    $user = new User;
+                    $user->email = $data['email'];
+                    $user->password = Hash::make($data['password']);
+                    $user->first_name = $data['first_name'];
+                    $user->last_name = $data['last_name'];
+
+                    $user->save();
+
+                    $token = $user->createToken($user->email . '_Token')->plainTextToken;
+
+                    return response()->json([
+                        'status' => 200,
+                        'message' => "Registration was Successful!",
+                        "username" => $data['first_name'],
+                        'token' => $token,
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        'status' => 400,
+                        'message' => "Something went wrong."
+                    ]);
+                }
             }
             else{
                 return response()->json([
                     'status' => 400,
-                    'message' => "Something went wrong.",
+                    'message' => "Email already exists.",
                 ]);
             }
 
